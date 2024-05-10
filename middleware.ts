@@ -1,22 +1,29 @@
-import {
-  auth,
-  clerkMiddleware,
-  createRouteMatcher
-} from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-const protectedRoutes = createRouteMatcher([
-  "/",
-  "/upcoming",
-  "/previous",
-  "/recordings",
-  "/personal-room",
-  "/meeting(.*)"
+const protectedRoute = createRouteMatcher([
+  '/',
+  '/upcoming',
+  '/meeting(.*)',
+  '/previous',
+  '/recordings',
+  '/personal-room',
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  if (protectedRoutes(req)) auth().protect();
+  if (auth().signedIn) {
+    // Si el usuario ya está autenticado, redirigirlo a una ruta diferente
+    return {
+      redirect: {
+        destination: '/', // Puedes cambiar esto por la ruta que desees
+        permanent: false,
+      },
+    };
+  } else if (protectedRoute(req)) {
+    // Proteger las rutas especificadas
+    auth().protect();
+  }
 });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"]
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
