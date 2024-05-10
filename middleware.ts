@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+mport { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 const protectedRoute = createRouteMatcher([
   '/',
@@ -10,18 +10,7 @@ const protectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  if (auth().signedIn) {
-    // Si el usuario ya está autenticado, redirigirlo a una ruta diferente
-    return {
-      redirect: {
-        destination: '/', // Puedes cambiar esto por la ruta que desees
-        permanent: false,
-      },
-    };
-  } else if (protectedRoute(req)) {
-    // Proteger las rutas especificadas
-    auth().protect();
-  }
+  if (protectedRoute(req)) auth().protect();
 });
 
 export const config = {
