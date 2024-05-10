@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/toaster";
 import "react-datepicker/dist/react-datepicker.css";
 import '@stream-io/video-react-sdk/dist/css/styles.css';
 import "./globals.css";
-import { esMX } from "@/interfaces";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <ClerkProvider
         appearance={{
           layout: {
@@ -39,11 +38,10 @@ export default function RootLayout({
             colorInputText: "#fff",
           },
         }}
-        localization={esMX} 
       >
         <body className={`${inter.className} bg-dark-2`}>
-          {children}
           <Toaster />
+          {children}
         </body>
       </ClerkProvider>
     </html>
